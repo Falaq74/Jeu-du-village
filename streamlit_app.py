@@ -1,53 +1,66 @@
 import streamlit as st
 
+st.set_page_config(page_title="Village Familial", page_icon="🏘️")
+
 st.title("🏘️ Crée ton Village !")
 
 # --- INFOS DU VILLAGE ---
 nom_v = st.text_input("Nom du Village")
-lieu = st.text_input("Où se trouve-t-il ?")
-slogan = st.text_input("Le Slogan")
-plat = st.text_input("Le Plat Signature")
-pouvoir = st.text_input("Le Super-Pouvoir du Village")
+col_a, col_b = st.columns(2)
+with col_a:
+    lieu = st.text_input("Lieu")
+    slogan = st.text_input("Slogan")
+with col_b:
+    plat = st.text_input("Plat Signature")
+    pouvoir = st.text_input("Super-Pouvoir")
 
 # --- L'IMAGE ---
-image_file = st.file_uploader("Ajoute une image", type=["jpg", "png", "jpeg"])
+image_file = st.file_uploader("Ajoute une photo", type=["jpg", "png", "jpeg"])
 
-# --- LES 5 FONDATEURS ---
-st.subheader("👥 Tes 5 Fondateurs")
-f1 = st.text_input("Fondateur 1 (Nom)")
-r1 = st.text_input("Pourquoi lui/elle ? (1)")
+# --- LES 10 RÔLES ---
+st.subheader("👥 Choisis tes 5 Piliers")
+st.info("Sélectionne un rôle différent pour chaque personne.")
 
-f2 = st.text_input("Fondateur 2 (Nom)")
-r2 = st.text_input("Pourquoi lui/elle ? (2)")
+liste_roles = [
+    "🛡️ Le Protecteur", 
+    "🍳 Le Chef Cuistot", 
+    "📜 Le Sage (Conseils)", 
+    "🤝 Le Pacificateur", 
+    "🛠️ Le Bâtisseur",
+    "🌿 Gardien de la Nature",
+    "📖 L'Enseignant",
+    "⚖️ Le Sage Arbitre",
+    "🎨 L'Artiste",
+    "🏹 Chasseur de Solutions"
+]
 
-f3 = st.text_input("Fondateur 3 (Nom)")
-r3 = st.text_input("Pourquoi lui/elle ? (3)")
+choix_final = []
+for i in range(1, 6):
+    col1, col2 = st.columns([1.2, 1.5])
+    with col1:
+        role_choisi = st.selectbox(f"Rôle {i}", ["Choisir..."] + liste_roles, key=f"role{i}")
+    with col2:
+        nom_f = st.text_input(f"Prénom {i}", key=f"n{i}")
+    raison_f = st.text_input(f"Pourquoi lui/elle ?", key=f"r{i}")
+    choix_final.append((role_choisi, nom_f, raison_f))
 
-f4 = st.text_input("Fondateur 4 (Nom)")
-r4 = st.text_input("Pourquoi lui/elle ? (4)")
-
-f5 = st.text_input("Fondateur 5 (Nom)")
-r5 = st.text_input("Pourquoi lui/elle ? (5)")
-
-# --- BOUTON FINAL ---
+# --- BOUTON GÉNÉRATION ---
 if st.button("✨ GÉNÉRER MA FICHE"):
     if nom_v:
-        st.header(f"📜 Village : {nom_v}")
+        st.markdown(f"### 📜 {nom_v}")
         
-        # Modification ici : l'image est limitée en largeur pour la capture
         if image_file:
-            st.image(image_file, width=300)
+            st.image(image_file, width=180) # Encore plus compact pour la capture
             
-        st.write(f"📍 **Lieu :** {lieu}")
-        st.write(f"📢 **Slogan :** {slogan}")
-        st.write(f"🍲 **Plat :** {plat}")
-        st.write(f"⚡ **Super-Pouvoir :** {pouvoir}")
+        st.write(f"🌍 **{lieu}** | 📢 *{slogan}*")
+        st.write(f"🍲 **Plat :** {plat} | ⚡ **Pouvoir :** {pouvoir}")
         st.write("---")
-        st.write(f"1. **{f1}** : {r1}")
-        st.write(f"2. **{f2}** : {r2}")
-        st.write(f"3. **{f3}** : {r3}")
-        st.write(f"4. **{f4}** : {r4}")
-        st.write(f"5. **{f5}** : {r5}")
+        
+        # Affichage très serré pour tout faire tenir
+        for r, n, rs in choix_final:
+            if r != "Choisir..." and n:
+                st.write(f"**{r}** : {n} - {rs}")
+        
         st.balloons()
     else:
-        st.error("N'oublie pas de donner un nom à ton village !")
+        st.error("Donne un nom à ton village !")
