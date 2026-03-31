@@ -33,12 +33,15 @@ r5 = st.text_input("Pourquoi lui/elle ? (5)")
 if st.button("✨ GÉNÉRER MA FICHE"):
     if nom_v:
         st.header(f"📜 Village : {nom_v}")
+        
+        # Modification ici : l'image est limitée en largeur pour la capture
         if image_file:
-            st.image(image_file)
-        st.write(f"📍 Lieu : {lieu}")
-        st.write(f"📢 Slogan : {slogan}")
-        st.write(f"🍲 Plat : {plat}")
-        st.write(f"⚡ Super-Pouvoir : {pouvoir}")
+            st.image(image_file, width=300)
+            
+        st.write(f"📍 **Lieu :** {lieu}")
+        st.write(f"📢 **Slogan :** {slogan}")
+        st.write(f"🍲 **Plat :** {plat}")
+        st.write(f"⚡ **Super-Pouvoir :** {pouvoir}")
         st.write("---")
         st.write(f"1. **{f1}** : {r1}")
         st.write(f"2. **{f2}** : {r2}")
@@ -47,4 +50,4 @@ if st.button("✨ GÉNÉRER MA FICHE"):
         st.write(f"5. **{f5}** : {r5}")
         st.balloons()
     else:
-        st.error("Mets au moins un nom de village !")
+        st.error("N'oublie pas de donner un nom à ton village !")
